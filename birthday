@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jana's Birthday ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Patrick+Hand&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Starry background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Countdown Section */
+        .countdown-container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .countdown-container h1 {
+            color: #fff;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            font-weight: 700;
+        }
+
+        .countdown-container .subtitle {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .time-unit {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 20px;
+            min-width: 100px;
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .time-unit:hover {
+            transform: translateY(-10px);
+        }
+
+        .time-value {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Interactive Card Section */
+        .card-container {
+            display: none;
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            height: 700px;
+            perspective: 1000px;
+        }
+
+        .card-container.active {
+            display: block;
+            animation: cardAppear 1s ease;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) rotateY(180deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffeef8 0%, #e0f3ff 100%);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 40px 30px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .card.active {
+            opacity: 1;
+            transform: translateX(0);
+            z-index: 5;
+        }
+
+        .card.exiting {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        /* Decorative borders */
+        .card-border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 2px dashed #ff9ed8;
+            border-radius: 25px;
+            pointer-events: none;
+        }
+
+        /* Hanging hearts decoration */
+        .hanging-hearts {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 30px;
+        }
+
+        .heart-string {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: swing 3s ease-in-out infinite;
+        }
+
+        .heart-string:nth-child(2) { animation-delay: 0.5s; }
+        .heart-string:nth-child(3) { animation-delay: 1s; }
+        .heart-string:nth-child(4) { animation-delay: 1.5s; }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .heart-line {
+            width: 1px;
+            height: 30px;
+            background: linear-gradient(to bottom, transparent, #ff9ed8);
+        }
+
+        .heart-deco {
+            font-size: 1.2rem;
+            filter: drop-shadow(0 2px 4px rgba(255, 158, 216, 0.5));
+        }
+
+        /* Card content */
+        .card-header {
+            text-align: center;
+            margin-top: 60px;
+            margin-bottom: 30px;
+        }
+
+        .card-title {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 2.5rem;
+            color: #ff6bb5;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .card-subtitle {
+            font-size: 1.1rem;
+            color: #8b7fb8;
+            font-weight: 400;
+        }
+
+        /* Photo circle */
+        .photo-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 30px auto;
+            overflow: hidden;
+            border: 5px solid #fff;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 0 10px rgba(255, 158, 216, 0.3);
+            position: relative;
+        }
+
+        .photo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Message box */
+        .message-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #ffd0ec;
+            box-shadow: 0 4px 15px rgba(255, 158, 216, 0.2);
+        }
+
+        .message-box p {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.2rem;
+            color: #666;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Floating decorations */
+        .floating-deco {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatAround 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .floating-deco:nth-child(1) { top: 100px; left: 20px; animation-delay: 0s; }
+        .floating-deco:nth-child(2) { top: 150px; right: 20px; animation-delay: 1s; }
+        .floating-deco:nth-child(3) { bottom: 150px; left: 30px; animation-delay: 2s; }
+        .floating-deco:nth-child(4) { bottom: 100px; right: 30px; animation-delay: 3s; }
+
+        @keyframes floatAround {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Click button (for first card) */
+        .click-button {
+            background: linear-gradient(135deg, #ff9ed8, #ff6bb5);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 107, 181, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .click-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 107, 181, 0.6);
+        }
+
+        .click-button:active {
+            transform: translateY(-2px);
+        }
+
+        /* Navigation dots */
+        .nav-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #ff6bb5;
+            transform: scale(1.3);
+        }
+
+        /* Flower decorations */
+        .flowers {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .flower {
+            font-size: 2rem;
+            animation: grow 2s ease-in-out infinite;
+        }
+
+        .flower:nth-child(2) { animation-delay: 0.3s; }
+        .flower:nth-child(3) { animation-delay: 0.6s; }
+        .flower:nth-child(4) { animation-delay: 0.9s; }
+
+        @keyframes grow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Cute illustrations */
+        .cute-bear {
+            font-size: 4rem;
+            text-align: center;
+            margin: 20px 0;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .card-container {
+                height: 650px;
+            }
+            .card {
+                padding: 30px 20px;
+            }
+            .card-title {
+                font-size: 2rem;
+            }
+            .photo-circle {
+                width: 160px;
+                height: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars -->
+    <div class="stars" id="starsContainer"></div>
+
+    <!-- Countdown Section -->
+    <div class="countdown-container" id="countdownSection">
+        <h1>✨ Jana's Birthday Countdown ✨</h1>
+        <p class="subtitle">Something special is coming...</p>
+        
+        <div class="countdown">
+            <div class="time-unit">
+                <div class="time-value" id="days">0</div>
+                <div class="time-label">Days</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-value" id="hours">0</div>
+                <div class="time-label">Hours</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-value" id="minutes">0</div>
+                <div class="time-label">Minutes</div>
+            </div>
+            <div class="time-unit">
+                <div class="time-value" id="seconds">0</div>
+                <div class="time-label">Seconds</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Card Section -->
+    <div class="card-container" id="cardContainer">
+        <!-- Card 1: Opening/Click to reveal -->
+        <div class="card active" id="card1">
+            <div class="card-border"></div>
+            <div class="hanging-hearts">
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">💕</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">💖</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">💗</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">💝</div></div>
+            </div>
+            
+            <div class="floating-deco">✨</div>
+            <div class="floating-deco">🌸</div>
+            <div class="floating-deco">⭐</div>
+            <div class="floating-deco">💫</div>
+            
+            <div class="card-header">
+                <div class="cute-bear">🧸</div>
+                <h2 class="card-title">A Special Gift</h2>
+                <p class="card-subtitle">For Someone Special...</p>
+            </div>
+            
+            <div class="message-box">
+                <p>Click the button below to open your birthday surprise! 🎁</p>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="click-button" onclick="nextCard()">Open Gift 🎀</button>
+            </div>
+            
+            <div class="flowers">
+                <span class="flower">🌸</span>
+                <span class="flower">🌺</span>
+                <span class="flower">🌸</span>
+                <span class="flower">🌺</span>
+            </div>
+        </div>
+
+        <!-- Card 2: Happy Birthday -->
+        <div class="card" id="card2">
+            <div class="card-border"></div>
+            <div class="hanging-hearts">
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">🎂</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">🎉</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">🎊</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">🎁</div></div>
+            </div>
+            
+            <div class="floating-deco">🎈</div>
+            <div class="floating-deco">🎀</div>
+            <div class="floating-deco">✨</div>
+            <div class="floating-deco">💝</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">Happy Birthday!</h2>
+                <p class="card-subtitle" style="font-size: 2rem; color: #ff6bb5; font-weight: 700;">JANA 🎂</p>
+            </div>
+            
+            <div class="photo-circle">
+                <img src="photo1.jpeg" id="photo1" alt="Jana">
+            </div>
+            
+            <div class="message-box">
+                <p>Today we celebrate YOU! 🌟</p>
+            </div>
+            
+            <div class="flowers">
+                <span class="flower">🎈</span>
+                <span class="flower">🎉</span>
+                <span class="flower">🎈</span>
+                <span class="flower">🎉</span>
+            </div>
+        </div>
+
+        <!-- Card 3: Special Message -->
+        <div class="card" id="card3">
+            <div class="card-border"></div>
+            <div class="hanging-hearts">
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">💕</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">💖</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">💗</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">💝</div></div>
+            </div>
+            
+            <div class="floating-deco">⭐</div>
+            <div class="floating-deco">✨</div>
+            <div class="floating-deco">🌟</div>
+            <div class="floating-deco">💫</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">Beautiful Soul</h2>
+            </div>
+            
+            <div class="photo-circle">
+                <img src="photo2.jpeg" id="photo2" alt="Jana">
+            </div>
+            
+            <div class="message-box">
+                <p>Your smile lights up every room and your presence makes the world brighter! ✨</p>
+            </div>
+            
+            <div class="flowers">
+                <span class="flower">🌸</span>
+                <span class="flower">🌺</span>
+                <span class="flower">🌸</span>
+                <span class="flower">🌺</span>
+            </div>
+        </div>
+
+        <!-- Card 4: Final Message -->
+        <div class="card" id="card4">
+            <div class="card-border"></div>
+            <div class="hanging-hearts">
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">🎀</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">💝</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">🎀</div></div>
+                <div class="heart-string"><div class="heart-line"></div><div class="heart-deco">💝</div></div>
+            </div>
+            
+            <div class="floating-deco">💕</div>
+            <div class="floating-deco">💖</div>
+            <div class="floating-deco">💗</div>
+            <div class="floating-deco">💝</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">Make a Wish!</h2>
+            </div>
+            
+            <div class="photo-circle">
+                <img src="photo3.jpeg" id="photo3" alt="Jana">
+            </div>
+            
+            <div class="message-box">
+                <p>"On this magical day, we celebrate the incredible person you are. May all your dreams come true, and may this year bring you endless joy, love, and beautiful moments! 🌟💖"</p>
+            </div>
+            
+            <div class="flowers">
+                <span class="flower">🎂</span>
+                <span class="flower">🕯️</span>
+                <span class="flower">🎂</span>
+                <span class="flower">🕯️</span>
+            </div>
+        </div>
+
+        <!-- Navigation Dots -->
+        <div class="nav-dots" id="navDots"></div>
+    </div>
+
+    <script>
+        // Birthday date: February 8, 2026 at 12:00 AM
+        const birthdayDate = new Date('2026-02-04 22:34:00').getTime();
+        
+        let currentCard = 1;
+        const totalCards = 4;
+        
+        // Create stars
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(star);
+            }
+        }
+        
+        // Update countdown
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = birthdayDate - now;
+            
+            if (distance < 0) {
+                document.getElementById('countdownSection').style.display = 'none';
+                document.getElementById('cardContainer').classList.add('active');
+                loadPhotos();
+                createNavigationDots();
+                return;
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+        
+        // Load photos
+        function loadPhotos() {
+            // Photos will be embedded via base64
+            
+            
+        }
+        
+        // Create navigation dots
+        function createNavigationDots() {
+            const dotsContainer = document.getElementById('navDots');
+            for (let i = 1; i <= totalCards; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 1 ? ' active' : '');
+                dot.onclick = () => goToCard(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+        
+        // Navigate to specific card
+        function goToCard(cardNum) {
+            if (cardNum < 1 || cardNum > totalCards) return;
+            
+            const currentCardEl = document.getElementById(`card${currentCard}`);
+            const nextCardEl = document.getElementById(`card${cardNum}`);
+            
+            currentCardEl.classList.remove('active');
+            currentCardEl.classList.add('exiting');
+            
+            setTimeout(() => {
+                currentCardEl.classList.remove('exiting');
+                nextCardEl.classList.add('active');
+                currentCard = cardNum;
+                updateDots();
+            }, 300);
+        }
+        
+        // Next card
+        function nextCard() {
+            if (currentCard < totalCards) {
+                goToCard(currentCard + 1);
+            }
+        }
+        
+        // Update dots
+        function updateDots() {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                if (index + 1 === currentCard) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        // Swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                // Swipe left - next card
+                if (currentCard < totalCards) {
+                    goToCard(currentCard + 1);
+                }
+            }
+            if (touchEndX > touchStartX + 50) {
+                // Swipe right - previous card
+                if (currentCard > 1) {
+                    goToCard(currentCard - 1);
+                }
+            }
+        }
+        
+        // Initialize
+        createStars();
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
